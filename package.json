@@ -2,8 +2,8 @@
   "name": "remocon-monorepo",
   "private": true,
   "scripts": {
-    "dev": "pnpm -r run dev",
-    "build": "pnpm -r run build",
+    "dev": "pnpm -r --parallel run dev",
+    "build": "pnpm -r --parallel run build",
     "prod": "pnpm --filter @remocon/backend prod"
   },
   "devDependencies": {

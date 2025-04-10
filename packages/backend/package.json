@@ -4,7 +4,7 @@
   "type": "module",
   "types": "./index.d.ts",
   "scripts": {
-    "dev": "tsx watch src/server/dev.ts",
+    "dev": "tsx watch --clear-screen=false src/server/dev.ts",
     "build": "tsc --noEmit",
     "prod": "tsx src/server/prod.ts"
   },
