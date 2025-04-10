@@ -2,6 +2,7 @@
   "name": "@remocon/backend",
   "private": true,
   "type": "module",
+  "types": "./index.d.ts",
   "scripts": {
     "dev": "tsx watch src/server/dev.ts",
     "build": "tsc --noEmit",
@@ -10,6 +11,8 @@
   "dependencies": {
     "@hono/node-server": "^1.14.0",
     "hono": "^4.7.6",
+    "obs-websocket-js": "^5.0.6",
+    "p-timeout": "^6.1.4",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
