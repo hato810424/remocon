@@ -45,6 +45,12 @@ importers:
 
   packages/frontend:
     dependencies:
+      '@remocon/backend':
+        specifier: workspace:*
+        version: link:../backend
+      hono:
+        specifier: ^4.7.6
+        version: 4.7.6
       react:
         specifier: ^19.0.0
         version: 19.1.0
