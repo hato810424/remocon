@@ -1,0 +1,34 @@
+# 依存関係
+node_modules
+.pnpm-store
+
+# ビルド出力
+dist
+dist-ssr
+build
+*.tsbuildinfo
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# ログ
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# エディタ設定
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
