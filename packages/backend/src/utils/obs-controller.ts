@@ -1,4 +1,4 @@
-import OBSWebSocket from 'obs-websocket-js'
+import OBSWebSocket, { OBSEventTypes, OBSResponseTypes } from 'obs-websocket-js'
 import { EventEmitter } from 'events'
 
 // イベントの型定義
@@ -32,6 +32,12 @@ export class OBSController extends EventEmitter {
     super()
     this.obs = new OBSWebSocket()
     this.url = url;
+
+    // 接続切断時のイベント
+    this.obs.once('ConnectionClosed', () => {
+      this.isConnected = false
+      this.emit('connectionChanged', false)
+    });
   }
 
   async connect(override: boolean = false) {
@@ -45,25 +51,40 @@ export class OBSController extends EventEmitter {
 
     try {
       await this.obs.connect(this.url);
-      this.obs.once('ConnectionClosed', () => {
-        this.isConnected = false
-        this.emit('connectionChanged', false)  // 接続切断を通知
-      });
 
       this.isConnected = true
-      this.emit('connectionChanged', true)  // 接続成功を通知
+      this.emit('connectionChanged', true)
       console.log('OBSに接続しました')
-      return true  // 接続成功を返す
+      return true
     } catch (error) {
       console.error('OBSへの接続に失敗しました:', error)
       this.isConnected = false
-      this.emit('connectionChanged', false)  // 接続失敗を通知
-      return false  // 接続失敗を返す
+      this.emit('connectionChanged', false)
+      return false
     }
   }
 
   getConnectionStatus() {
     return this.isConnected
+  }
+
+  async getScenes() {
+    if (!this.isConnected) {
+      console.error('OBSに接続されていません')
+      return []
+    }
+
+    try {
+      const { scenes } = await this.obs.call('GetSceneList')
+      return scenes as {
+        sceneIndex: number
+        sceneName: string
+        sceneUuid: string
+      }[];
+    } catch (error) {
+      console.error('シーンの取得に失敗しました:', error)
+      return []
+    }
   }
 
   async setScene(sceneName: string) {

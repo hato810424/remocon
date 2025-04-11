@@ -18,6 +18,18 @@ const handler = app
       return c.json({ status: "ok" });
     }
   )
+  .get(
+    "/obs/scenes",
+    async (c) => {
+      const obsController = c.get("obsController");
+      const scenes = await obsController.getScenes();
+      return c.json(
+        scenes.reverse()
+          // シーン名が【素材】で始まる場合は除外
+          .filter(scene => !(scene.sceneName?.toString().startsWith("【素材】")))
+        );
+    }
+  )
 
 export type AppType = typeof handler;
 export default handler;
