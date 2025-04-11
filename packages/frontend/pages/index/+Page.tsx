@@ -88,10 +88,12 @@ GainSlider.displayName = 'GainSlider'
 export default function App() {
   const [activeScene, setActiveScene] = useState<string | null>(null)
 
-  const [isReconnecting, setIsReconnecting] = useState(false)
+  const [isObsReconnecting, setIsObsReconnecting] = useState(false)
+  const [isVmReconnecting, setIsVmReconnecting] = useState(false)
   const [obsStatus, setObsStatus] = useState<{ connected: boolean; message: string }>({ connected: false, message: '未接続' })
   const [socket, setSocket] = useState<Socket<SocketType.ServerToClientEvents, SocketType.ClientToServerEvents> | null>(null)
   const [scenes, setScenes] = useState<Scenes>([])
+  const [vmStatus, setVmStatus] = useState<{ connected: boolean; message: string }>({ connected: false, message: '未接続' })
   const [strips, setStrips] = useState<Array<{
     gain: number,
     locked: boolean
@@ -102,9 +104,14 @@ export default function App() {
     socket?.emit('requestSceneChange', { sceneUuid, sceneName: scenes.find(scene => scene.sceneUuid === sceneUuid)?.sceneName || '' })
   }
 
-  const handleReconnect = () => {
-    setIsReconnecting(true)
+  const handleOBSReconnect = () => {
+    setIsObsReconnecting(true)
     socket?.emit('requestOBSReconnect')
+  }
+
+  const handleVMReconnect = () => {
+    setIsVmReconnecting(true)
+    socket?.emit('requestVMReconnect')
   }
 
   const handleTransition = () => {
@@ -159,7 +166,12 @@ export default function App() {
 
     newSocket.on('obsStatus', (connected) => {
       setObsStatus({ connected, message: connected ? '接続' : '未接続' })
-      setIsReconnecting(false)
+      setIsObsReconnecting(false)
+    })
+
+    newSocket.on('vmStatus', (connected) => {
+      setVmStatus({ connected, message: connected ? '接続' : '未接続' })
+      setIsVmReconnecting(false)
     })
 
     newSocket.on('sceneChanged', (scene) => {
@@ -175,22 +187,40 @@ export default function App() {
     <Container size="md" p="sm">
       <Stack gap="md">
         <Paper shadow="sm" px="md" py="xs" withBorder>
-          <Group justify="space-between" align="center">
-            <Text size="sm" c={obsStatus.connected ? 'green' : 'red'}>
-              OBS: {obsStatus.message}
-            </Text>
-            {!obsStatus.connected && (
-              <ActionIcon 
-                variant="subtle" 
-                color="gray" 
-                onClick={handleReconnect}
-                title="再接続"
-                loading={isReconnecting}
-              >
-                <RefreshCcw size={16} />
-              </ActionIcon>
-            )}
-          </Group>
+          <Stack gap={0}>
+            <Group justify="space-between" align="center">
+              <Text size="sm" c={obsStatus.connected ? 'green' : 'red'}>
+                OBS: {obsStatus.message}
+              </Text>
+              {!obsStatus.connected && (
+                <ActionIcon 
+                  variant="subtle" 
+                  color="gray" 
+                  onClick={handleOBSReconnect}
+                  title="再接続"
+                  loading={isObsReconnecting}
+                >
+                  <RefreshCcw size={16} />
+                </ActionIcon>
+              )}
+            </Group>
+            <Group justify="space-between" align="center">
+              <Text size="sm" c={vmStatus.connected ? 'green' : 'red'}>
+                Voicemeeter: {vmStatus.message}
+              </Text>
+              {!vmStatus.connected && (
+                <ActionIcon 
+                  variant="subtle" 
+                  color="gray" 
+                  onClick={handleVMReconnect}
+                  title="再接続"
+                  loading={isVmReconnecting}
+                >
+                  <RefreshCcw size={16} />
+                </ActionIcon>
+              )}
+            </Group>
+          </Stack>
         </Paper>
         
         <Paper shadow="sm" p="md" withBorder>
