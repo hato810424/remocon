@@ -9,14 +9,20 @@ import { relative, resolve } from "path";
 import { createApp, obsController } from "../index";
 import socket from "../socket";
 import { root } from "../../root";
+import { readFileSync } from "fs";
 
 dotenv.config({ path: resolve(import.meta.dirname, "../../../../.env") });
 
 const app = new Hono();
 
 app.use("*", compress());
-app.use("*", serveStatic({ root: relative(root, resolve(import.meta.dirname, "../../../frontend/dist")) }));
+app.use("*", serveStatic({ root: relative(root, resolve(import.meta.dirname, "../../../frontend/dist/client")) }));
 app.route("/", createApp());
+
+app.notFound(async (c) => {
+  const html = readFileSync(resolve(import.meta.dirname, "../../../frontend/dist/client/404.html"), { encoding: "utf-8" });
+  return c.html(html);
+});
 
 const server = serve(
   {

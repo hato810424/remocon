@@ -2,12 +2,13 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import dotenv from "dotenv";
 import { resolve } from "path";
+import vike from "vike/plugin";
 
 dotenv.config({ path: resolve("../../.env") });
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [vike(), react()],
   build: {
     emptyOutDir: false,
   },

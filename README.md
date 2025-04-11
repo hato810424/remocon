@@ -5,7 +5,7 @@
 ```
 /
 ├── packages/
-│   ├── frontend/    # React + TypeScript + Vite
+│   ├── frontend/    # React + TypeScript + Vike
 │   └── backend/     # Hono + Socket.IO
 ├── package.json     # ルートのpackage.json
 └── pnpm-workspace.yaml

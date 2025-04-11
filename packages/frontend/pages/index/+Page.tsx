@@ -5,7 +5,7 @@ import { Container, Group, Button, Stack, Paper, Title, Text, ActionIcon } from 
 import { io, Socket } from 'socket.io-client'
 import { RefreshCcw } from 'lucide-react'
 
-const client = hc<BackendAppType>(location.origin)
+const client = hc<BackendAppType>(typeof window !== 'undefined' ? location.origin : '');
 
 const $getScenes = client.api.obs.scenes.$get;
 type Scenes = InferResponseType<typeof $getScenes>;
