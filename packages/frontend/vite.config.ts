@@ -19,7 +19,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       "/socket.io": {
-        target: `ws://localhost:${process.env.BACKEND_PORT || 3001}/socket.io`,
+        target: `ws://localhost:${process.env.BACKEND_PORT || 3001}`,
         ws: true,
         changeOrigin: true,
       },
