@@ -13,6 +13,7 @@
     "@mantine/hooks": "^7.17.4",
     "@remocon/backend": "workspace:*",
     "hono": "^4.7.6",
+    "lucide-react": "^0.487.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "socket.io-client": "^4.8.1"
