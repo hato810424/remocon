@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import ngrok from "@ngrok/ngrok";
 import qrcode from "qrcode-terminal";
 import { relative, resolve } from "path";
-import { createApp, obsController } from "../index";
+import { createApp, obsController, voicemeeterController } from "../index";
 import socket from "../socket";
 import { root } from "../../root";
 import { readFileSync } from "fs";
@@ -34,7 +34,7 @@ const server = serve(
   }
 );
 
-socket({ server, obsController });
+socket({ server, obsController, voicemeeterController });
 
 if (process.env.NGROK) {
   ngrok.connect({

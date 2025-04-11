@@ -5,6 +5,7 @@ import { OBSController } from "./utils/obs-controller";
 import apiRouter from "./api";
 import dotenv from "dotenv";
 import { resolve } from "path";
+import { VoicemeeterController } from "./utils/voicemeeter-controller";
 
 dotenv.config({ path: resolve(import.meta.dirname, "../../../.env") });
 
@@ -15,6 +16,8 @@ export type Variables = {
 
 // OBSControllerを初期化
 export const obsController = new OBSController({ url: process.env.OBS_URL || "ws://localhost:4455" });
+// VoicemeeterControllerを初期化
+export const voicemeeterController = new VoicemeeterController();
 
 export function createApp() {
   const app = new Hono<{ Variables: Variables }>();
@@ -28,6 +31,8 @@ export function createApp() {
     c.set("obsController", obsController);
     await next();
   });
+  // VoicemeeterControllerを接続
+  voicemeeterController.connect();
 
   // ルーティング
   app.route("/", apiRouter);

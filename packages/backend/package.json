@@ -14,7 +14,8 @@
     "hono": "^4.7.6",
     "obs-websocket-js": "^5.0.6",
     "p-timeout": "^6.1.4",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "voicemeeter-connector": "^2.0.0"
   },
   "devDependencies": {
     "@ngrok/ngrok": "^1.4.1",
