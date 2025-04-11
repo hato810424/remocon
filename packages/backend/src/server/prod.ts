@@ -4,7 +4,7 @@ import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import dotenv from "dotenv";
 import { relative, resolve } from "path";
-import backend from "../index";
+import { createApp, obsController } from "../index";
 import socket from "../socket";
 import { root } from "../../root";
 
@@ -14,7 +14,7 @@ const app = new Hono();
 
 app.use("*", compress());
 app.use("*", serveStatic({ root: relative(root, resolve(import.meta.dirname, "../../../frontend/dist")) }));
-app.route("/", backend);
+app.route("/", createApp());
 
 const server = serve(
   {
@@ -26,4 +26,4 @@ const server = serve(
   }
 );
 
-socket(server);
+socket({ server, obsController });

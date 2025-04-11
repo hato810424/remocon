@@ -3,7 +3,7 @@ import { cors } from "hono/cors";
 import { serve } from "@hono/node-server";
 import dotenv from "dotenv";
 import { resolve } from "path";
-import backend from "../index";
+import { createApp, obsController } from "../index";
 import socket from "../socket";
 
 dotenv.config({ path: resolve(import.meta.dirname, "../../../../.env") });
@@ -11,7 +11,7 @@ dotenv.config({ path: resolve(import.meta.dirname, "../../../../.env") });
 const app = new Hono();
 
 app.use("*", cors());
-app.route("/", backend);
+app.route("/", createApp());
 
 const server = serve({
     fetch: app.fetch,
@@ -20,4 +20,7 @@ const server = serve({
     console.log(`Server is running: http://${info.address}:${info.port}`);
 });
 
-socket(server);
+socket({
+    server,
+    obsController,
+});

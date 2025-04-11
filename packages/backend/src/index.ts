@@ -8,24 +8,29 @@ import { resolve } from "path";
 
 dotenv.config({ path: resolve(import.meta.dirname, "../../../.env") });
 
+// 型定義
 export type Variables = {
   obsController: OBSController;
 }
 
-const app = new Hono<{ Variables: Variables }>();
-
-app.use("*", logger());
-app.use("*", poweredBy());
-
 // OBSControllerを初期化
-const obsController = new OBSController({ url: process.env.OBS_URL || "ws://localhost:4455" });
-obsController.connect();
-app.use("*", async (c, next) => {
-  c.set("obsController", obsController);
-  await next();
-});
+export const obsController = new OBSController({ url: process.env.OBS_URL || "ws://localhost:4455" });
 
-// ルーティング
-app.route("/", apiRouter);
+export function createApp() {
+  const app = new Hono<{ Variables: Variables }>();
 
-export default app;
+  app.use("*", logger());
+  app.use("*", poweredBy());
+
+  // OBSControllerを接続
+  obsController.connect();
+  app.use("*", async (c, next) => {
+    c.set("obsController", obsController);
+    await next();
+  });
+
+  // ルーティング
+  app.route("/", apiRouter);
+
+  return app;
+}
