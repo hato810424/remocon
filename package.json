@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r --parallel run build",
-    "prod": "pnpm --filter @remocon/backend prod"
+    "prod": "pnpm --filter @remocon/backend prod",
+    "prod:with-ngrok": "pnpm --filter @remocon/backend prod:with-ngrok"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

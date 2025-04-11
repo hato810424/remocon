@@ -1,4 +1,4 @@
-import OBSWebSocket, { OBSEventTypes, OBSResponseTypes } from 'obs-websocket-js'
+import OBSWebSocket, { OBSEventTypes } from 'obs-websocket-js'
 import { EventEmitter } from 'events'
 
 // イベントの型定義

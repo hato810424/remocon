@@ -3,6 +3,8 @@ import { compress } from "hono/compress";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import dotenv from "dotenv";
+import ngrok from "@ngrok/ngrok";
+import qrcode from "qrcode-terminal";
 import { relative, resolve } from "path";
 import { createApp, obsController } from "../index";
 import socket from "../socket";
@@ -27,3 +29,14 @@ const server = serve(
 );
 
 socket({ server, obsController });
+
+if (process.env.NGROK) {
+  ngrok.connect({
+    addr: Number(process.env.PROD_PORT) || 3000,
+    domain: process.env.NGROK_DOMAIN,
+    authtoken_from_env: true
+  }).then(listener => {
+    console.log(`Ingress established at: ${listener.url()}`)
+    qrcode.generate(listener.url() ?? "", {small: true});
+  });
+}

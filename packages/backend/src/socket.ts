@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { type ServerType } from "@hono/node-server/.";
+import { type ServerType } from "@hono/node-server";
 import { OBSController } from "./utils/obs-controller";
 import { OBSEventTypes } from "obs-websocket-js";
 
