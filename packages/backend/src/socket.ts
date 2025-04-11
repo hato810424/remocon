@@ -9,6 +9,7 @@ export namespace SocketType {
 
   export interface ClientToServerEvents {
     requestOBSReconnect: () => void;
+    requestTransition: () => void;
   }
 
   export interface InterServerEvents {
@@ -44,6 +45,10 @@ export default ({ server, obsController }: { server: ServerType, obsController: 
       }
 
       obsController.connect();
+    });
+
+    socket.on('requestTransition', () => {
+      obsController.triggerTransition();
     });
   });
 

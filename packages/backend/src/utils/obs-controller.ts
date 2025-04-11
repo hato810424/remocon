@@ -146,4 +146,17 @@ export class OBSController extends EventEmitter {
       return false
     }
   }
+
+  async triggerTransition() {
+    if (!this.isConnected) {
+      console.error('OBSに接続されていません')
+      return
+    }
+    
+    try {
+      await this.obs.call('TriggerStudioModeTransition');
+    } catch (error) {
+      console.error('トランジションの開始に失敗しました:', error)
+    }
+  }
 } 
