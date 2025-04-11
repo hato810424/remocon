@@ -4,6 +4,7 @@ import { EventEmitter } from 'events'
 // イベントの型定義
 interface OBSControllerEvents {
   connectionChanged: (connected: boolean) => void;
+  sceneChanged: (scene: OBSEventTypes["CurrentProgramSceneChanged"]) => void;
 }
 
 // EventEmitterに型パラメータを追加
@@ -34,10 +35,15 @@ export class OBSController extends EventEmitter {
     this.url = url;
 
     // 接続切断時のイベント
-    this.obs.once('ConnectionClosed', () => {
+    this.obs.on('ConnectionClosed', () => {
       this.isConnected = false
       this.emit('connectionChanged', false)
     });
+
+    // シーン切り替え時のイベント
+    this.obs.on('CurrentProgramSceneChanged', (data) => {
+      this.emit('sceneChanged', data)
+    })
   }
 
   async connect(override: boolean = false) {
@@ -87,14 +93,14 @@ export class OBSController extends EventEmitter {
     }
   }
 
-  async setScene(sceneName: string) {
+  async setScene({ sceneUuid, sceneName }: { sceneUuid: string, sceneName: string }) {
     if (!this.isConnected) {
       console.error('OBSに接続されていません')
       return
     }
 
     try {
-      await this.obs.call('SetCurrentProgramScene', { sceneName })
+      await this.obs.call('SetCurrentProgramScene', { sceneUuid })
       console.log(`シーンを ${sceneName} に切り替えました`)
     } catch (error) {
       console.error('シーンの切り替えに失敗しました:', error)
